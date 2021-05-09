@@ -5,23 +5,42 @@
         Home Page
       </div>
       <q-space />
-      <div class="text-h5">
+      <div class=" row q-gutter-x-lg">
         <q-select
           v-model="sortOption"
           :options="['name', 'released', 'created', 'rating']"
           label="Sort By"
           @input="sortGames"
-          class="sort"
+          class="filters-width"
           dense
           clearable
           bg-color="dark"
           dark
         />
+        <q-input
+          v-model="searchGame"
+          debounce="3000"
+          dense
+          placeholder="Search..."
+          color="primary"
+          dark
+          class="filters-width"
+        >
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
       </div>
     </div>
-    <div v-if="!loading" class="card-container">
+    <div v-if="!loading && gamesCard.length > 0" class="card-container">
       <div v-for="game in gamesCard" :key="game.id">
         <GameCard :game="game" />
+      </div>
+    </div>
+    <div v-else-if="gamesCard.length === 0 && !loading">
+      <div class="flex justify-center text-h6 text-primary">
+        Can't find any game. <br />
+        Please search again.
       </div>
     </div>
     <div v-else>
@@ -65,20 +84,37 @@ export default Vue.extend({
     };
     const sortOption: keyof GamesCardModel | string = '';
     const loading = false;
-    return { gamesCard, currentPage, gamePagination, sortOption, loading };
+    const searchGame = '';
+    return {
+      gamesCard,
+      currentPage,
+      gamePagination,
+      sortOption,
+      loading,
+      searchGame
+    };
   },
   computed: {
     maxPages(): number {
       return Number((this.gamePagination.count / 10).toFixed(0));
     }
   },
+  watch: {
+    searchGame() {
+      this.loadData();
+    }
+  },
   mounted() {
-    const url = `games?key=${process.env.key || ''}&page_size=10`;
-    this.loadData(url);
+    this.loadData();
   },
   methods: {
-    loadData(url: string): void {
+    loadData(): void {
+      const url = `games?key=${process.env.key || ''}&page_size=10&page=${
+        this.currentPage
+      }&ordering=${this.sortOption}&search=${this.searchGame}`;
+
       this.loading = true;
+
       axiosInstance
         .get(url)
         .then((response: AxiosResponse) => {
@@ -96,18 +132,12 @@ export default Vue.extend({
     },
     //Fetch the new date when change page
     changePage(): void {
-      const url = `games?key=${process.env.key || ''}&page_size=10&page=${
-        this.currentPage
-      }&&ordering=${this.sortOption}`;
-      this.loadData(url);
+      this.loadData();
     },
     //Fetch games sorted by option
     sortGames(): void {
       if (!this.sortOption) this.currentPage = 1;
-      const url = `games?key=${process.env.key || ''}&page_size=10&ordering=${
-        this.sortOption
-      }`;
-      this.loadData(url);
+      this.loadData();
     }
   }
 });
@@ -121,7 +151,7 @@ export default Vue.extend({
   justify-content: space-evenly;
 }
 
-.sort {
+.filters-width {
   width: 250px;
 }
 </style>
