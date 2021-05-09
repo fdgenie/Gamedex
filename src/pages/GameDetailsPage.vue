@@ -6,11 +6,13 @@
     <div v-if="!loading">
       <div class="row q-px-md q-gutter-xl justify-center">
         <div class="col-4">
-          <q-img
-            :src="game.background_image"
-            spinner-color="white"
-            class="img"
-          />
+          <q-img :src="game.background_image" spinner-color="white" class="img">
+            <template v-slot:error>
+              <div class="absolute-full flex flex-center bg-grey-8 text-white">
+                Cannot load image
+              </div>
+            </template>
+          </q-img>
         </div>
         <div class="col-7">
           <div class="row">

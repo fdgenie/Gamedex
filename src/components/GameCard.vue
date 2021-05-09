@@ -2,7 +2,18 @@
   <q-card class="bg-grey-10 q-ma-md card" @click="goToDetails">
     <q-card-section>
       <div>
-        <q-img :src="game.background_image" spinner-color="white" class="img" />
+        <q-img
+          :src="game.background_image"
+          spinner-color="white"
+          class="img"
+          alt=""
+        >
+          <template v-slot:error>
+            <div class="absolute-full flex flex-center bg-grey-8 text-white">
+              Cannot load image
+            </div>
+          </template>
+        </q-img>
       </div>
       <div class="row items-center q-mt-md">
         <div class="col text-body1">{{ game.name }}</div>
