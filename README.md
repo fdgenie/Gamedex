@@ -13,6 +13,9 @@ Application is using [rawg.io](https://rawg.io/apidocs) api for data.<br/>
 Rawg  is the largest video game database and game discovery service. They are sharing 500,000+ games, search, and machine learning recommendations with the world.
 
 # Images
+![home_page](https://github.com/fdgenie/Gamedex/blob/master/public/images/homepage.png)
+![detail_page](https://github.com/fdgenie/Gamedex/blob/master/public/images/detail-page.png)
+![phone_home_page](https://github.com/fdgenie/Gamedex/blob/master/public/images/phone-home-page.png)
 
 
 ## Install the dependencies
