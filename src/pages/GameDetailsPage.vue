@@ -22,7 +22,7 @@
               {{ game.name }}
             </div>
             <div
-              class="col-auto q-mr-md text-body2 q-pa-sm metacritic self-center"
+              class="col-auto q-mr-md text-body2 q-pa-sm metacritic self-center roboto-mono-font"
               :class="ratingColor(game.metacritic)"
             >
               {{ game.metacritic ? game.metacritic : '??' }}

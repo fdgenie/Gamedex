@@ -60,7 +60,7 @@ export default Vue.extend({
       previous: '',
       results: []
     };
-    const sortOption: keyof GamesCardModel = 'name';
+    const sortOption: keyof GamesCardModel | string = '';
     const loading = false;
     return { gamesCard, currentPage, gamePagination, sortOption, loading };
   },

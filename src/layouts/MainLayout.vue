@@ -14,12 +14,28 @@
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
         <div>
-          ® All rights reserved
+          ® All rights reserved 2021
         </div>
         <q-space />
-        <q-btn flat label="Sitemap" />
-        <q-btn flat label="Api" />
-        <q-btn flat label="Github" />
+        <q-btn
+          flat
+          label="Sitemap"
+          to="https://gamedex-assign.netlify.app/sitemap.xml"
+        />
+        <q-btn
+          flat
+          label="Api"
+          type="a"
+          href="https://rawg.io/apidocs"
+          target="_blank"
+        />
+        <q-btn
+          flat
+          label="Github"
+          type="a"
+          href="https://github.com/fdgenie/Gamedex"
+          target="_blank"
+        />
       </q-toolbar>
     </q-footer>
 

@@ -1,5 +1,24 @@
 // app global css in SCSS form
 .metacritic {
-    border: thin solid;
-    border-radius: 50%;
-  }
+  border: thin solid;
+  border-radius: 50%;
+}
+
+@font-face {
+  font-family: raleway;
+  src: url(./fonts/Raleway-Regular.ttf);
+}
+
+@font-face {
+  font-family: robotoMono;
+  src: url(./fonts/RobotoMono-Regular.ttf);
+}
+
+// declare a class which applies it
+body {
+  font-family: 'raleway';
+}
+
+.roboto-mono-font {
+  font-family: 'robotoMono';
+}

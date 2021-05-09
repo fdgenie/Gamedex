@@ -7,7 +7,7 @@
       <div class="row items-center q-mt-md">
         <div class="col text-body1">{{ game.name }}</div>
         <div
-          class="col-auto text-body2 q-pa-sm metacritic"
+          class="col-auto text-body2 q-pa-sm metacritic roboto-mono-font"
           :class="ratingColor(game.metacritic)"
         >
           {{ game.metacritic ? game.metacritic : '??' }}

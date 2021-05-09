@@ -9,6 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { configure } = require('quasar/wrappers');
 const path = require('path');
+const SitemapPlugin = require('sitemap-webpack-plugin').default;
 
 module.exports = configure(function(/* ctx */) {
   return {
@@ -77,28 +78,26 @@ module.exports = configure(function(/* ctx */) {
           '@': path.resolve(__dirname, './src')
         };
 
-        // cfg.plugins.push(
-        //   new SitemapPlugin({
-        //     base: 'http://localhost:8080/',
-        //     paths: [
-        //       {
-        //         path: '/',
-        //         lastmod: '2015-01-04',
-        //         priority: 1,
-        //         changefreq: 'monthly'
-        //       },
-        //       {
-        //         path: '/random',
-        //         lastmod: '2015-01-04',
-        //         priority: 0.7,
-        //         changefreq: 'monthly'
-        //       }
-        //     ],
-        //     options: {
-        //       filename: 'sitemap.xml'
-        //     }
-        //   })
-        // );
+        cfg.plugins.push(
+          new SitemapPlugin({
+            base: 'https://gamedex-assign.netlify.app/',
+            paths: [
+              {
+                path: '/',
+                lastmod: '2021-09-05',
+                priority: 1
+              },
+              {
+                path: '/game',
+                lastmod: '2021-09-05',
+                priority: 0.8
+              }
+            ],
+            options: {
+              filename: 'sitemap.xml'
+            }
+          })
+        );
       }
     },
 
