@@ -20,7 +20,9 @@
         <q-btn
           flat
           label="Sitemap"
-          to="https://gamedex-assign.netlify.app/sitemap.xml"
+          type="a"
+          href="https://gamedex-assign.netlify.app/sitemap.xml"
+          target="_blank"
         />
         <q-btn
           flat
