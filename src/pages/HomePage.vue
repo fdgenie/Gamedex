@@ -98,11 +98,12 @@ export default Vue.extend({
     changePage(): void {
       const url = `games?key=${process.env.key || ''}&page_size=10&page=${
         this.currentPage
-      }`;
+      }&&ordering=${this.sortOption}`;
       this.loadData(url);
     },
     //Fetch games sorted by option
     sortGames(): void {
+      if (!this.sortOption) this.currentPage = 1;
       const url = `games?key=${process.env.key || ''}&page_size=10&ordering=${
         this.sortOption
       }`;
