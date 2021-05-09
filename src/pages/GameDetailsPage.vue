@@ -11,22 +11,25 @@
             spinner-color="white"
             class="img"
           />
-          <div class="flex justify-center q-mt-sm no-wrap">
-            <div class="text-weight-bold text-body2">Release Date: &nbsp;</div>
-            {{ game.released }}
-          </div>
         </div>
         <div class="col-7">
           <div class="row">
             <div class="col text-h6">
               {{ game.name }}
             </div>
+
             <div
               class="col-auto q-mr-md text-body2 q-pa-sm metacritic self-center roboto-mono-font"
               :class="ratingColor(game.metacritic)"
             >
               {{ game.metacritic ? game.metacritic : '??' }}
             </div>
+          </div>
+          <div class="flex q-mt-sm no-wrap">
+            <div class="text-weight-bold text-body2">
+              Release Date: &nbsp;
+            </div>
+            {{ game.released }}
           </div>
           <div class="q-mt-md text-body1">
             {{ game.description_raw }}
@@ -54,7 +57,7 @@
         </div>
       </div>
       <div>
-        <div class=" text-h6 text-weight-bold flex justify-center">
+        <div class=" text-h6 text-weight-bold flex justify-center q-mt-xl">
           Related Games
         </div>
         <div class="row justify-evenly">

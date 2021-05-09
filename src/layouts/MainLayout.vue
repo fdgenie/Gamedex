@@ -11,7 +11,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer elevated class="bg-grey-8 text-white">
+    <q-footer elevated class="bg-grey-10 text-white">
       <q-toolbar>
         <div>
           ® All rights reserved 2021
@@ -20,9 +20,9 @@
         <q-btn
           flat
           label="Sitemap"
-          type="a"
+           type="a"
           href="https://gamedex-assign.netlify.app/sitemap.xml"
-          target="_blank"
+           target="_blank"
         />
         <q-btn
           flat

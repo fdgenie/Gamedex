@@ -6,7 +6,7 @@
       </div>
     </template>
     <template v-slot:control>
-      <div class="q-mt-sm">
+      <div class="q-mt-sm text-white">
         {{ value }}
       </div>
     </template>

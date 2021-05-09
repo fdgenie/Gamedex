@@ -1,5 +1,5 @@
 <template>
-  <q-card class="bg-blue-grey-10 q-ma-md card" @click="goToDetails">
+  <q-card class="bg-grey-10 q-ma-md card" @click="goToDetails">
     <q-card-section>
       <div>
         <q-img :src="game.background_image" spinner-color="white" class="img" />

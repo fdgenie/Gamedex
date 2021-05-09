@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row q-px-xl q-py-md">
-      <div class="text-h5">
+      <div class="text-h5 color-text text-primary">
         Home Page
       </div>
       <q-space />
@@ -11,10 +11,11 @@
           :options="['name', 'released', 'created', 'rating']"
           label="Sort By"
           @input="sortGames"
-          color="primary"
-          class="bg-white sort"
+          class="sort"
           dense
           clearable
+          bg-color="dark"
+          dark
         />
       </div>
     </div>
@@ -34,6 +35,8 @@
         :max="maxPages"
         input
         @input="changePage"
+        color="primary"
+        input-class="text-white"
       />
     </div>
   </q-page>
