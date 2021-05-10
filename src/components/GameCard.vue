@@ -6,7 +6,6 @@
           :src="game.background_image"
           spinner-color="white"
           class="img"
-          alt=""
         >
           <template v-slot:error>
             <div class="absolute-full flex flex-center bg-grey-8 text-white">
