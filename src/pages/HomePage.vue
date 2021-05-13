@@ -53,7 +53,7 @@
         v-model="currentPage"
         :max="maxPages"
         input
-        @input="changePage"
+        @click="changePage"
         color="primary"
         input-class="text-white"
       />
@@ -64,9 +64,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import GameCard from 'components/GameCard.vue';
-import { axiosInstance } from 'boot/axios';
 import { GamesCardModel, GamesPagination } from 'src/models/models';
-import { AxiosError, AxiosResponse } from 'app/node_modules/axios';
 
 export default Vue.extend({
   name: 'HomePage',
@@ -74,27 +72,29 @@ export default Vue.extend({
     GameCard
   },
   data() {
-    const gamesCard: GamesCardModel[] = [];
     const currentPage = 1;
-    const gamePagination: GamesPagination = {
-      count: 0,
-      next: '',
-      previous: '',
-      results: []
-    };
     const sortOption: keyof GamesCardModel | string = '';
-    const loading = false;
     const searchGame = '';
     return {
-      gamesCard,
       currentPage,
-      gamePagination,
       sortOption,
-      loading,
       searchGame
     };
   },
   computed: {
+    gamePagination(): GamesPagination {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getGamePagination'] as GamesPagination;
+    },
+    gamesCard(): GamesCardModel[] {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getGamePagination']
+        .results as GamesCardModel[];
+    },
+    loading(): boolean {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getLoading'] as boolean;
+    },
     maxPages(): number {
       return Number((this.gamePagination.count / 10).toFixed(0));
     }
@@ -102,6 +102,9 @@ export default Vue.extend({
   watch: {
     searchGame() {
       this.loadData();
+    },
+    $route() {
+      this.$router.go(0);
     }
   },
   mounted() {
@@ -109,26 +112,12 @@ export default Vue.extend({
   },
   methods: {
     loadData(): void {
-      const url = `games?key=${process.env.key || ''}&page_size=10&page=${
-        this.currentPage
-      }&ordering=${this.sortOption}&search=${this.searchGame}`;
-
-      this.loading = true;
-
-      axiosInstance
-        .get(url)
-        .then((response: AxiosResponse) => {
-          const paginationResults = response.data as GamesPagination;
-
-          this.gamesCard = paginationResults.results;
-          this.gamePagination = paginationResults;
-        })
-        .catch((error: AxiosError) => {
-          throw error;
-        })
-        .finally(() => {
-          this.loading = false;
-        });
+      void this.$store.dispatch('games/getGamesDispatch', {
+        currentPage: this.currentPage,
+        ordering: this.sortOption,
+        search: this.searchGame,
+        category: this.$route.query.category
+      });
     },
     //Fetch the new date when change page
     changePage(): void {

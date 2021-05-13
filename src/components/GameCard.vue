@@ -2,11 +2,7 @@
   <q-card class="bg-grey-10 q-ma-md card" @click="goToDetails">
     <q-card-section>
       <div>
-        <q-img
-          :src="game.background_image"
-          spinner-color="white"
-          class="img"
-        >
+        <q-img :src="game.background_image" spinner-color="white" class="img">
           <template v-slot:error>
             <div class="absolute-full flex flex-center bg-grey-8 text-white">
               Cannot load image
@@ -50,11 +46,10 @@ export default Vue.extend({
 
       return 'text-red';
     },
+    //get you to the details of a game
     goToDetails() {
-      return new Promise((resolve, reject) => {
-        this.$router.push({ path: `/game/${this.game.id}` }, resolve, reject);
-        if (this.$route.path !== '/') this.$router.go(0);
-      });
+      void this.$router.push({ path: `/game/${this.game.id}` });
+      if (this.$route.path !== '/') this.$router.go(0);
     }
   }
 });

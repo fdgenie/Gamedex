@@ -1,7 +1,10 @@
-export interface GamesPagination {
+interface Pagination {
   count: number;
   next: string;
   previous: string;
+}
+
+export interface GamesPagination extends Pagination {
   results: GamesCardModel[];
 }
 
@@ -23,16 +26,11 @@ export interface GameModel extends GamesCardModel {
   publishers: [{ name: string; slug: string }];
 }
 
-export interface GameImagePagination {
-  count: number;
-  next: string;
-  previous: string;
-  results: GameImagesModel[];
+export interface GenresPagination extends Pagination {
+  results: GenresModel[];
 }
 
-export interface GameImagesModel {
-  id: number;
-  image: string;
-  width: number;
-  height: number;
+export interface GenresModel {
+  name: string;
+  slug: string;
 }

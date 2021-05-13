@@ -1,5 +1,11 @@
 <template>
-  <q-field :label="label" borderless stack-label label-color="primary">
+  <q-field
+    :label="label"
+    borderless
+    stack-label
+    label-color="primary"
+    class="field"
+  >
     <template v-slot:label>
       <div class="label">
         {{ label }}
@@ -32,6 +38,9 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.field {
+  min-width: 100px;
+}
 .label {
   text-decoration: underline;
 }

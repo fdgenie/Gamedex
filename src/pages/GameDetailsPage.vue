@@ -1,8 +1,10 @@
 <template>
-  <q-page class="q-pa-md q-gutter-md">
+  <q-page :class="$q.platform.is.mobile ? '' : 'q-pa-md q-gutter-md'">
     <div class="q-px-xl q-py-md text-h5">
       Detail Page
     </div>
+
+    <!-- Game Description -->
     <div v-if="!loading">
       <div class="row q-px-md q-gutter-xl justify-center">
         <div class="col-4">
@@ -38,26 +40,45 @@
           </div>
         </div>
       </div>
+
+      <!-- Details  -->
       <div class="row q-px-xl q-py-md justify-between">
-        <div class="col-auto">
-          <DetailsFields label="Platforms" :value="gamePlatforms" />
+        <div class="col-autop">
+          <DetailsFields
+            label="Platforms"
+            :value="getPlatformNameOfAnObject(game.platforms)"
+          />
         </div>
         <div class="col-auto">
-          <DetailsFields label="Genres" :value="gameGenres" />
+          <DetailsFields
+            label="Genres"
+            :value="getNameOfAnObject(game.genres)"
+          />
         </div>
         <div class="col-auto">
-          <DetailsFields label="Developers" :value="gameDevelopers" />
+          <DetailsFields
+            label="Developers"
+            :value="getNameOfAnObject(game.developers)"
+          />
         </div>
         <div class="col-auto">
-          <DetailsFields label="Publisher" :value="gamePublishers" />
+          <DetailsFields
+            label="Publisher"
+            :value="getNameOfAnObject(game.publishers)"
+          />
         </div>
         <div class="col-auto">
           <DetailsFields label="Website" :value="game.website" />
         </div>
         <div class="col-12">
-          <DetailsFields label="Tags" :value="gameTags" />
+          <DetailsFields label="Tags" :value="getNameOfAnObject(game.tags)" />
         </div>
       </div>
+      <div v-if="randomPage" class="flex justify-center">
+        <q-btn color="primary" label="New Random" @click="goToRandomGame" />
+      </div>
+
+      <!-- Related Games -->
       <div>
         <div class=" text-h6 text-weight-bold flex justify-center q-mt-xl">
           Related Games
@@ -79,16 +100,10 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { axiosInstance } from 'boot/axios';
-import { AxiosError, AxiosResponse } from 'app/node_modules/axios';
-import {
-  GameImagesModel,
-  GameModel,
-  GamesCardModel,
-  GamesPagination
-} from 'src/models/models';
+import { GameModel, GamesCardModel } from 'src/models/models';
 import DetailsFields from 'components/DetailsFields.vue';
 import GameCard from 'components/GameCard.vue';
+import { AxiosResponse } from 'app/node_modules/axios';
 
 export default Vue.extend({
   name: 'GameDetailsPage',
@@ -96,97 +111,50 @@ export default Vue.extend({
     DetailsFields,
     GameCard
   },
-  data() {
-    const game: GameModel = {
-      id: 0,
-      name: '',
-      metacritic: 0,
-      background_image: '',
-      released: '',
-      developers: [{ name: '', slug: '' }],
-      tags: [{ name: '' }],
-      description_raw: '',
-      platforms: [{ platform: { name: '' } }],
-      genres: [{ name: '', slug: '' }],
-      website: '',
-      publishers: [{ name: '', slug: '' }]
-    };
-    const images: GameImagesModel[] = [];
-    const gamePlatforms = '';
-    const gameGenres = '';
-    const gameDevelopers = '';
-    const gamePublishers = '';
-    const gameTags = '';
-    const relatedGames: GamesCardModel[] = [];
-    const loading = false;
-    return {
-      game,
-      images,
-      gamePlatforms,
-      gameGenres,
-      gameDevelopers,
-      gamePublishers,
-      gameTags,
-      relatedGames,
-      loading
-    };
+  computed: {
+    game(): GameModel {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getGameDetails'] as GameModel;
+    },
+    relatedGames(): GamesCardModel[] {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getRelatedGames'] as GamesCardModel[];
+    },
+    randomPage(): boolean {
+      return this.$route.query['random'] !== undefined;
+    },
+    loading(): boolean {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      return this.$store.getters['games/getLoading'] as boolean;
+    }
   },
   mounted(): void {
     this.loadData();
   },
   methods: {
     loadData(): void {
-      this.loading = true;
-      axiosInstance
-        .get(`games/${this.$route.params.id}?key=${process.env.key || ''}`)
-        .then((response: AxiosResponse) => {
-          this.game = response.data as GameModel;
-
-          this.gamePlatforms = this.game.platforms
-            .map(p => p.platform.name)
-            .join(', ');
-
-          this.gameGenres = this.game.genres.map(p => p.name).join(', ');
-
-          this.gameDevelopers = this.game.developers
-            .map(p => p.name)
-            .join(', ');
-
-          this.gamePublishers = this.game.publishers
-            .map(p => p.name)
-            .join(', ');
-
-          this.gameTags = this.game.tags.map(p => p.name).join(', ');
-
-          const searchRelatedDevelopers = this.game.developers
-            .map(p => p.slug)
-            .join(',');
-
-          const searchRelatedPublishers = this.game.publishers
-            .map(p => p.slug)
-            .join(',');
-
-          const searchRelatedGenres = this.game.genres
-            .map(p => p.slug)
-            .join(',');
-
-          axiosInstance
-            .get(
-              `games?key=${process.env.key ||
-                ''}&page_size=3&developers=${searchRelatedDevelopers}&publishers=${searchRelatedPublishers}&genres=${searchRelatedGenres}`
-            )
-            .then((response: AxiosResponse) => {
-              this.relatedGames = (response.data as GamesPagination).results;
-            })
-            .catch((error: AxiosError) => {
-              throw error;
-            })
-            .finally(() => {
-              this.loading = false;
-            });
+      void this.$store
+        .dispatch('games/getGameDetailsDispatch', {
+          gameId: this.$route.params.id
         })
-        .catch((errors: AxiosError) => {
-          throw errors;
+        .then((res: AxiosResponse) => {
+          const game = res.data as GameModel;
+
+          const searchRelatedDevelopers = this.getSlugOfAnObject(
+            game.developers
+          );
+
+          const searchRelatedPublishers = this.getSlugOfAnObject(
+            game.publishers
+          );
+
+          const searchRelatedGenres = this.getSlugOfAnObject(game.genres);
+
+          void this.$store.dispatch('games/getRelatedGamesDispatch', {
+            searchRelatedDevelopers,
+            searchRelatedPublishers,
+            searchRelatedGenres
+          });
         });
     },
     //change the color of the metacritic depending on the rating
@@ -198,6 +166,27 @@ export default Vue.extend({
       }
 
       return 'text-red';
+    },
+    //Go to a details page in a random game
+    goToRandomGame() {
+      const gameId = Math.floor(Math.random() * 54912);
+
+      void this.$router.push({ path: `/game/${gameId}?random` });
+      if (this.$route.path !== '/') this.$router.go(0);
+    },
+    //Get the slug of an object
+    getSlugOfAnObject(slugObject: [{ slug: string }]): string {
+      return slugObject.map(p => p.slug).join(',');
+    },
+    //Get the name of an object
+    getNameOfAnObject(nameObject: [{ name: string }]): string {
+      return nameObject.map(p => p.name).join(',');
+    },
+    //Get the platform name of an object
+    getPlatformNameOfAnObject(
+      nameObject: [{ platform: { name: string } }]
+    ): string {
+      return nameObject.map(p => p.platform.name).join(',');
     }
   }
 });
