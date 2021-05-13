@@ -6,7 +6,10 @@
 
     <!-- Game Description -->
     <div v-if="!loading">
-      <div class="row q-px-md q-gutter-xl justify-center">
+      <div
+        class=" q-px-md q-gutter-xl justify-center"
+        :class="$q.platform.is.mobile ? 'no-wrap' : 'row'"
+      >
         <div class="col-4">
           <q-img :src="game.background_image" spinner-color="white" class="img">
             <template v-slot:error>
